@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">UrlTask5</string>
+    <string name="btn_add">Add</string>
 </resources>

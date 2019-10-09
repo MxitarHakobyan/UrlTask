@@ -1,6 +1,7 @@
 package com.mino.urltask5.di.main;
 
 import androidx.lifecycle.ViewModel;
+import androidx.recyclerview.widget.ItemTouchHelper;
 
 import com.mino.urltask5.di.app.ViewModelKey;
 import com.mino.urltask5.ui.main.viewmodel.UrlViewModel;

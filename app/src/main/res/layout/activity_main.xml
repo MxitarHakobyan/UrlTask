@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewmodel"
-            type="com.mino.urltask5.ui.main.viewmodel.UrlViewModel"/>
+            type="com.mino.urltask5.ui.main.viewmodel.UrlViewModel" />
 
         <variable
-            name="handler"
-            type="com.mino.urltask5.ui.common.binding.ClickHandler"/>
+            name="clickHandler"
+            type="com.mino.urltask5.ui.common.binding.ClickHandler" />
+
+        <variable
+            name="swipeHandler"
+            type="com.mino.urltask5.ui.common.binding.SwipeHandler" />
 
     </data>
 
@@ -23,30 +27,48 @@
             android:id="@+id/btnCheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/btn_check"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="10dp"
-            android:onClick="@{() -> handler.addClick(viewmodel)}"/>
+            android:background="@color/colorPrimary"
+            android:onClick="@{() -> clickHandler.addClick(viewmodel)}"
+            android:text="@string/btn_check"
+            android:textColor="@color/text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="textUri"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnCheck"
-            app:layout_constraintTop_toTopOf="@id/btnCheck"
+            android:text="@={viewmodel.insertUrl}"
             app:layout_constraintBottom_toBottomOf="@id/btnCheck"
-            android:text="@={viewmodel.insertUrl}"/>
+            app:layout_constraintEnd_toStartOf="@id/btnCheck"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btnCheck"
+            app:layout_constraintVertical_bias="0.0" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvUrls"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipRefresh"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnCheck"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnCheck">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvUrls"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                bind:bgColorSwipeLeft="@{@color/app_red}"
+                bind:bgColorSwipeRight="@{@color/app_red}"
+                bind:drawableSwipeLeft="@{@drawable/ic_close_white_24dp}"
+                bind:drawableSwipeRight="@{@drawable/ic_close_white_24dp}"
+                bind:onItemSwipeLeft="@{(position) -> swipeHandler.onItemSwipedLeft(position)}"
+                bind:onItemSwipeRight="@{(position) -> swipeHandler.onItemSwipedRight(position)}"
+                bind:swipeEnabled="@{true}" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

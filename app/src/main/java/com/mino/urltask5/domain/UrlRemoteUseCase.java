@@ -25,8 +25,7 @@ public class UrlRemoteUseCase implements BaseUseCaseBehaivor {
         return repository.getResponseObservable(url)
                 .map(ResponseUtil::Response2RequestInfo)
                 .map(requestInfo -> new UrlEntity(url,
-                        ResponseUtil.isRequestValid(requestInfo.getCode()),
-                        requestInfo.getTime())
+                        ResponseUtil.isResponseValid(requestInfo.getCode()), requestInfo.getTime())
                 );
     }
 

@@ -1,4 +1,4 @@
-package com.mino.urltask5.data.remote;
+package com.mino.urltask5.data.remote.entity;
 
 public class RequestInfo {
 

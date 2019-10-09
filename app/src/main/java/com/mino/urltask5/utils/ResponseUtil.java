@@ -2,7 +2,7 @@ package com.mino.urltask5.utils;
 
 import android.util.Log;
 
-import com.mino.urltask5.data.remote.RequestInfo;
+import com.mino.urltask5.data.remote.entity.RequestInfo;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -20,9 +20,9 @@ public abstract class ResponseUtil {
         return new RequestInfo(response.raw().sentRequestAtMillis(), response.code());
     }
 
-    public static int isRequestValid(final int code) {
+    public static int isResponseValid(final int code) {
         if (String.valueOf(code).charAt(FIRST_CHAR) == '2') {
-            Log.d(TAG, "isRequestValid: code=  " + code);
+            Log.d(TAG, "isResponseValid: code=  " + code);
             return URL_AVAILABLE;
         }else {
             return URL_UNAVAILABLE;

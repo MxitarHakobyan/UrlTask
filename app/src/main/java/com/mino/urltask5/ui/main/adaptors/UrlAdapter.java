@@ -22,7 +22,7 @@ import javax.inject.Inject;
 public class UrlAdapter extends RecyclerView.Adapter<UrlAdapter.UrlViewHolder> {
 
     private UrlDiffCallBack diffCallBack;
-    private List<UrlModel> urlModels = new ArrayList<>();
+    private List<UrlModel> filteredUrlModels = new ArrayList<>();
     private List<UrlModel> fullUrlModels = new ArrayList<>();
 
     @Inject
@@ -42,12 +42,12 @@ public class UrlAdapter extends RecyclerView.Adapter<UrlAdapter.UrlViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull UrlViewHolder holder, int position) {
-        holder.bind(urlModels.get(position));
+        holder.bind(filteredUrlModels.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return urlModels.size();
+        return filteredUrlModels.size();
     }
 
     public Filter getFilter() {
@@ -64,7 +64,7 @@ public class UrlAdapter extends RecyclerView.Adapter<UrlAdapter.UrlViewHolder> {
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
-                for (UrlModel item : urlModels) {
+                for (UrlModel item : fullUrlModels) {
                     if (Objects.requireNonNull(item.getUrl().get()).toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
@@ -90,10 +90,10 @@ public class UrlAdapter extends RecyclerView.Adapter<UrlAdapter.UrlViewHolder> {
     }
 
     private void updateUrlsList(final List<UrlModel> urls) {
-        diffCallBack.setItems(urlModels, urls);
+        diffCallBack.setItems(filteredUrlModels, urls);
         DiffUtil.DiffResult diffResult =DiffUtil.calculateDiff(diffCallBack);
-        urlModels.clear();
-        urlModels.addAll(urls);
+        filteredUrlModels.clear();
+        filteredUrlModels.addAll(urls);
         diffResult.dispatchUpdatesTo(UrlAdapter.this);
     }
 

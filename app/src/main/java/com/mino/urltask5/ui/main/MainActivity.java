@@ -10,41 +10,42 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.mino.urltask5.R;
-import com.mino.urltask5.data.repos.OrderType;
+import com.mino.urltask5.utils.OrderType;
 import com.mino.urltask5.databinding.ActivityMainBinding;
 import com.mino.urltask5.ui.common.binding.ClickHandler;
 import com.mino.urltask5.ui.common.viewmodels_factory.ViewModelProviderFactory;
+import com.mino.urltask5.ui.common.binding.SwipeHandler;
 import com.mino.urltask5.ui.main.adaptors.UrlAdapter;
-import com.mino.urltask5.ui.main.adaptors.UrlItemsTouchCallback;
+import com.mino.urltask5.ui.main.viewmodel.UrlModel;
 import com.mino.urltask5.ui.main.viewmodel.UrlViewModel;
 
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class MainActivity extends DaggerAppCompatActivity {
+public class MainActivity extends DaggerAppCompatActivity implements SwipeHandler {
 
     @Inject
     UrlAdapter adapter;
-
     @Inject
     ViewModelProviderFactory providerFactory;
-
     @Inject
     ClickHandler clickHandler;
 
     private UrlViewModel viewModel;
     private ActivityMainBinding binding;
     private RecyclerView rvUrls;
+    private List<UrlModel> models = new ArrayList<>();
+    private SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,25 +54,20 @@ public class MainActivity extends DaggerAppCompatActivity {
         viewModel = new ViewModelProvider(getViewModelStore(), providerFactory).get(UrlViewModel.class);
 
         binding.setViewmodel(viewModel);
-        binding.setHandler(clickHandler);
+        binding.setClickHandler(clickHandler);
         binding.setLifecycleOwner(this);
+        binding.setSwipeHandler(this);
+
+        refreshLayout = findViewById(R.id.swipRefresh);
+
+        refreshLayout.setOnRefreshListener(() -> viewModel.reCheck(models));
 
         rvUrls = findViewById(R.id.rvUrls);
         rvUrls.setLayoutManager(new LinearLayoutManager(this));
         rvUrls.setAdapter(adapter);
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-            }
-        }).attachToRecyclerView(rvUrls);
 
         getByUrls(OrderType.URL);
+
         viewModel.error.observe(this, s -> Toast.makeText(MainActivity.this, s, Toast.LENGTH_LONG).show());
     }
 
@@ -122,6 +118,23 @@ public class MainActivity extends DaggerAppCompatActivity {
     private void getByUrls(final OrderType orderType) {
         viewModel.getUrlsOrderBy(orderType).observe(this, urlModels -> {
             adapter.setFullUrlModels(urlModels);
+            models = urlModels;
         });
+    }
+
+    @Override
+    public void onItemSwipedLeft(int position) {
+        viewModel.delete(models.get(position).getUrl().get());
+    }
+
+    @Override
+    public void onItemSwipedRight(int position) {
+        viewModel.delete(models.get(position).getUrl().get());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        viewModel.unsubscribe();
     }
 }

@@ -2,6 +2,7 @@ package com.mino.urltask5.data.repos;
 
 import com.mino.urltask5.data.db.UrlDao;
 import com.mino.urltask5.data.db.entity.UrlEntity;
+import com.mino.urltask5.utils.OrderType;
 
 import java.util.List;
 
@@ -35,11 +36,11 @@ public class UrlRepository {
                 .subscribe(urlEntity1 -> urlDao.update(urlEntity1));
     }
 
-    public Disposable delete(final UrlEntity urlEntity) {
-        return Observable.just(urlEntity)
+    public Disposable delete(final String url) {
+        return Observable.just(url)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe(urlEntity1 -> urlDao.delete(urlEntity1));
+                .subscribe(url1 -> urlDao.delete(url1));
     }
 
     public Flowable<List<UrlEntity>> getUrlsOrderBy(final OrderType orderType) {

@@ -20,10 +20,10 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/btnAdd"
+            android:id="@+id/btnCheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/btn_add"
+            android:text="@string/btn_check"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="10dp"
@@ -33,9 +33,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnAdd"
-            app:layout_constraintTop_toTopOf="@id/btnAdd"
-            app:layout_constraintBottom_toBottomOf="@id/btnAdd"
+            app:layout_constraintEnd_toStartOf="@id/btnCheck"
+            app:layout_constraintTop_toTopOf="@id/btnCheck"
+            app:layout_constraintBottom_toBottomOf="@id/btnCheck"
             android:text="@={viewmodel.insertUrl}"/>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -44,7 +44,7 @@
             android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnAdd"
+            app:layout_constraintTop_toBottomOf="@id/btnCheck"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

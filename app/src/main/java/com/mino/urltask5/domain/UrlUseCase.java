@@ -14,7 +14,7 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public class UrlUseCase implements BaseUseCaseBehaivor {
+public class  UrlUseCase implements BaseUseCaseBehaivor {
 
     @Inject
     UrlRepository urlRepository;

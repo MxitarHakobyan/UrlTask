@@ -39,7 +39,7 @@ public class UrlDiffCallBack extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return oldItemsList.get(oldItemPosition).getUrl().equals(newItemsList.get(newItemPosition).getUrl());
+        return oldItemsList.get(oldItemPosition).getUrl().get().equals(newItemsList.get(newItemPosition).getUrl().get());
     }
 
     @Override

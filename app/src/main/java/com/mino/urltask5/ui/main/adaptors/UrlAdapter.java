@@ -48,7 +48,7 @@ public class UrlAdapter extends RecyclerView.Adapter<UrlAdapter.UrlViewHolder> {
     }
 
     public void updateUrlsList(final List<UrlModel> urls) {
-        diffCallBack.setItems(urls, urlModels);
+        diffCallBack.setItems(urlModels, urls);
         DiffUtil.DiffResult diffResult =DiffUtil.calculateDiff(diffCallBack);
         urlModels.clear();
         urlModels.addAll(urls);

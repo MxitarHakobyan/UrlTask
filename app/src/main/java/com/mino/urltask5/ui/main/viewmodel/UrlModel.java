@@ -13,7 +13,7 @@ public class UrlModel {
 
     public UrlModel(final @NonNull String url,
                     final int availability) {
-        this.url =new ObservableField<>(url);
+        this.url = new ObservableField<>(url);
         this.availability = new ObservableInt(availability);
     }
 

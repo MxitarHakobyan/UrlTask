@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/url"
+        android:title="@string/sort_by_url" />
+    <item
+        android:id="@+id/availability"
+        android:title="@string/sort_by_availability" />
+    <item
+        android:id="@+id/loadingTime"
+        android:title="@string/sort_by_loading_time" />
+</menu>

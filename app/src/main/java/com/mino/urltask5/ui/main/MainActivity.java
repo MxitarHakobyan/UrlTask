@@ -1,18 +1,27 @@
 package com.mino.urltask5.ui.main;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mino.urltask5.R;
+import com.mino.urltask5.data.repos.OrderType;
 import com.mino.urltask5.databinding.ActivityMainBinding;
 import com.mino.urltask5.ui.common.binding.ClickHandler;
 import com.mino.urltask5.ui.common.viewmodels_factory.ViewModelProviderFactory;
 import com.mino.urltask5.ui.main.adaptors.UrlAdapter;
 import com.mino.urltask5.ui.main.viewmodel.UrlViewModel;
+
+import java.net.URL;
 
 import javax.inject.Inject;
 
@@ -46,10 +55,40 @@ public class MainActivity extends DaggerAppCompatActivity {
         rvUrls = findViewById(R.id.rvUrls);
         rvUrls.setLayoutManager(new LinearLayoutManager(this));
         rvUrls.setAdapter(adapter);
+        getByUrls(OrderType.URL);
+        viewModel.error.observe(this, s -> Toast.makeText(MainActivity.this, s, Toast.LENGTH_LONG).show());
+    }
 
-        viewModel.getUrlsOrderByUrl().observe(this, urlModels -> {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_item, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.url : {
+                getByUrls(OrderType.URL);
+                break;
+            }
+            case R.id.availability : {
+                getByUrls(OrderType.AVAILABILITY);
+                break;
+            }
+            case R.id.loadingTime : {
+                getByUrls(OrderType.TIME);
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void getByUrls(final OrderType orderType) {
+        viewModel.getUrlsOrderBy(orderType).observe(this, urlModels -> {
             adapter.updateUrlsList(urlModels);
         });
-
     }
+
 }

@@ -27,4 +27,10 @@ public interface UrlDao {
 
     @Query("SELECT * FROM urlsTable ORDER BY url ASC")
     Flowable<List<UrlEntity>> getUrlsOrderByUrl();
+
+    @Query("SELECT * FROM urlsTable ORDER BY availability ASC")
+    Flowable<List<UrlEntity>> getUrlsOrderByAvailability();
+
+    @Query("SELECT * FROM urlsTable ORDER BY loadingTime ASC")
+    Flowable<List<UrlEntity>> getUrlsOrderByLoadingTime();
 }

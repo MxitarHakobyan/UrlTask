@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.LiveDataReactiveStreams;
 
 import com.mino.urltask5.data.db.entity.UrlEntity;
+import com.mino.urltask5.data.repos.OrderType;
 import com.mino.urltask5.data.repos.UrlRepository;
 import com.mino.urltask5.ui.main.viewmodel.UrlModel;
 import com.mino.urltask5.utils.UrlModelMapper;
@@ -38,8 +39,8 @@ public class  UrlUseCase implements BaseUseCaseBehaivor {
         compositeDisposable.add(urlRepository.delete(urlEntity));
     }
 
-    public LiveData<List<UrlModel>> getUrlsOrderByUrl() {
-        return LiveDataReactiveStreams.fromPublisher(urlRepository.getUrlsOrderByUrl()
+    public LiveData<List<UrlModel>> getUrlsOrderBy(final OrderType orderType) {
+        return LiveDataReactiveStreams.fromPublisher(urlRepository.getUrlsOrderBy(orderType)
                 .map(UrlModelMapper::convert2UrlModel)
         );
     }

@@ -42,10 +42,25 @@ public class UrlRepository {
                 .subscribe(urlEntity1 -> urlDao.delete(urlEntity1));
     }
 
-    public Flowable<List<UrlEntity>> getUrlsOrderByUrl() {
-        return urlDao.getUrlsOrderByUrl()
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io());
+    public Flowable<List<UrlEntity>> getUrlsOrderBy(final OrderType orderType) {
+
+        if (orderType == OrderType.URL) {
+            return urlDao.getUrlsOrderByUrl()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io());
+        } else if (orderType == OrderType.AVAILABILITY) {
+            return urlDao.getUrlsOrderByAvailability()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io());
+        } else if (orderType == OrderType.TIME) {
+            return urlDao.getUrlsOrderByLoadingTime()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io());
+        } else {
+            return urlDao.getUrlsOrderByUrl()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io());
+        }
     }
 
 }

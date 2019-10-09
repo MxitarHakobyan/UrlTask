@@ -6,7 +6,7 @@ import com.mino.urltask5.utils.ResponseMapper;
 
 import javax.inject.Inject;
 
-import io.reactivex.Single;
+import io.reactivex.Maybe;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class UrlRemoteUseCase implements BaseUseCaseBehaivor {
@@ -21,8 +21,8 @@ public class UrlRemoteUseCase implements BaseUseCaseBehaivor {
     public UrlRemoteUseCase() {
     }
 
-    public Single<UrlEntity> checkUrl(final String url) {
-        return repository.getHeaderObservable(url)
+    public Maybe<UrlEntity> checkUrl(final String url) {
+        return repository.getResponseObservable(url)
                 .map(ResponseMapper::Response2RequestInfo)
                 .map(requestInfo -> new UrlEntity(url,
                         ResponseMapper.isRequestValid(requestInfo.getCode()),

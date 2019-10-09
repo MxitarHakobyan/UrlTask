@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">UrlTask5</string>
     <string name="btn_check">Check</string>
+    <string name="sort_by_url">Sort By Url</string>
+    <string name="sort_by_availability">Sort By Availability</string>
+    <string name="sort_by_loading_time">Sort By Loading Time</string>
 </resources>

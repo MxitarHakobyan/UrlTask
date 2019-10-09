@@ -32,6 +32,7 @@
         <androidx.appcompat.widget.AppCompatEditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:inputType="textUri"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnCheck"
             app:layout_constraintTop_toTopOf="@id/btnCheck"

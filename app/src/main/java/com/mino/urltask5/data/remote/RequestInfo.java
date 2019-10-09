@@ -5,7 +5,8 @@ public class RequestInfo {
     private long time;
     private int code;
 
-    public RequestInfo(long time, int code) {
+    public RequestInfo(final long time,
+                       final int code) {
         this.time = time;
         this.code = code;
     }

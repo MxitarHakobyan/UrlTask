@@ -10,9 +10,9 @@ import retrofit2.Response;
 import static com.mino.urltask5.utils.Constants.URL_AVAILABLE;
 import static com.mino.urltask5.utils.Constants.URL_UNAVAILABLE;
 
-public abstract class ResponseMapper {
+public abstract class ResponseUtil {
 
-    private static final String TAG = "ResponseMapper";
+    private static final String TAG = "ResponseUtil";
 
     private static final int FIRST_CHAR = 0;
 

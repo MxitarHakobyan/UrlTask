@@ -4,4 +4,6 @@
     <string name="sort_by_url">Sort By Url</string>
     <string name="sort_by_availability">Sort By Availability</string>
     <string name="sort_by_loading_time">Sort By Loading Time</string>
+    <string name="search">Search</string>
+    <string name="sort_by">Sort by</string>
 </resources>

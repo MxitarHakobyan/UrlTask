@@ -2,7 +2,7 @@ package com.mino.urltask5.domain;
 
 import com.mino.urltask5.data.db.entity.UrlEntity;
 import com.mino.urltask5.data.repos.UrlRemoteRepository;
-import com.mino.urltask5.utils.ResponseMapper;
+import com.mino.urltask5.utils.ResponseUtil;
 
 import javax.inject.Inject;
 
@@ -23,9 +23,9 @@ public class UrlRemoteUseCase implements BaseUseCaseBehaivor {
 
     public Maybe<UrlEntity> checkUrl(final String url) {
         return repository.getResponseObservable(url)
-                .map(ResponseMapper::Response2RequestInfo)
+                .map(ResponseUtil::Response2RequestInfo)
                 .map(requestInfo -> new UrlEntity(url,
-                        ResponseMapper.isRequestValid(requestInfo.getCode()),
+                        ResponseUtil.isRequestValid(requestInfo.getCode()),
                         requestInfo.getTime())
                 );
     }

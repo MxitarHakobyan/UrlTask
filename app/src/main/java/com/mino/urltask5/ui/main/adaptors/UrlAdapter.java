@@ -2,6 +2,7 @@ package com.mino.urltask5.ui.main.adaptors;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Filter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -13,6 +14,7 @@ import com.mino.urltask5.ui.main.viewmodel.UrlModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -21,6 +23,7 @@ public class UrlAdapter extends RecyclerView.Adapter<UrlAdapter.UrlViewHolder> {
 
     private UrlDiffCallBack diffCallBack;
     private List<UrlModel> urlModels = new ArrayList<>();
+    private List<UrlModel> fullUrlModels = new ArrayList<>();
 
     @Inject
     public UrlAdapter(final UrlDiffCallBack diffCallBack) {
@@ -47,7 +50,46 @@ public class UrlAdapter extends RecyclerView.Adapter<UrlAdapter.UrlViewHolder> {
         return urlModels.size();
     }
 
-    public void updateUrlsList(final List<UrlModel> urls) {
+    public Filter getFilter() {
+        return urlFilter;
+    }
+
+    private Filter urlFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<UrlModel> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(fullUrlModels);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (UrlModel item : urlModels) {
+                    if (Objects.requireNonNull(item.getUrl().get()).toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            updateUrlsList((List<UrlModel>) results.values);
+        }
+    };
+
+    public void setFullUrlModels(List<UrlModel> fullUrlModels) {
+        this.fullUrlModels.clear();
+        this.fullUrlModels.addAll(fullUrlModels);
+        updateUrlsList(fullUrlModels);
+    }
+
+    private void updateUrlsList(final List<UrlModel> urls) {
         diffCallBack.setItems(urlModels, urls);
         DiffUtil.DiffResult diffResult =DiffUtil.calculateDiff(diffCallBack);
         urlModels.clear();

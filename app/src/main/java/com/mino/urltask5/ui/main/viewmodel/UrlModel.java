@@ -1,18 +1,20 @@
 package com.mino.urltask5.ui.main.viewmodel;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
 
 import java.util.Objects;
 
 public class UrlModel {
 
-    private String url;
-    private int availability;
+    private ObservableField<String> url;
+    private ObservableInt availability;
 
     public UrlModel(final @NonNull String url,
                     final int availability) {
-        this.url = url;
-        this.availability = availability;
+        this.url = new ObservableField<>(url);
+        this.availability = new ObservableInt(availability);
     }
 
     @Override
@@ -20,8 +22,8 @@ public class UrlModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UrlModel urlModel = (UrlModel) o;
-        return availability == urlModel.availability &&
-                Objects.equals(url, urlModel.url);
+        return availability.get() == urlModel.availability.get() &&
+                Objects.equals(url.get(), urlModel.url.get());
     }
 
     @Override
@@ -29,11 +31,11 @@ public class UrlModel {
         return Objects.hash(url, availability);
     }
 
-    public String getUrl() {
+    public ObservableField<String> getUrl() {
         return url;
     }
 
-    public int getAvailability() {
+    public ObservableInt getAvailability() {
         return availability;
     }
 }

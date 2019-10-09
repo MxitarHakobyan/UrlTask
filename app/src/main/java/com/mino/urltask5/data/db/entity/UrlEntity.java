@@ -13,11 +13,11 @@ public class UrlEntity {
 
     private int availability;
 
-    private int loadingTime;
+    private long loadingTime;
 
     public UrlEntity(@NonNull final String url,
                      final int availability,
-                     final int loadingTime) {
+                     final long loadingTime) {
         this.url = url;
         this.availability = availability;
         this.loadingTime = loadingTime;
@@ -32,7 +32,7 @@ public class UrlEntity {
         return availability;
     }
 
-    public int getLoadingTime() {
+    public long getLoadingTime() {
         return loadingTime;
     }
 }

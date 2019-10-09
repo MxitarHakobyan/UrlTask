@@ -1,7 +1,6 @@
 package com.mino.urltask5.data.db;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -22,9 +21,15 @@ public interface UrlDao {
     @Update
     void update(final UrlEntity urlEntity);
 
-    @Delete
-    void delete(final UrlEntity urlEntity);
+    @Query("DELETE FROM urlsTable WHERE url = :url")
+    void delete(final String url);
 
     @Query("SELECT * FROM urlsTable ORDER BY url ASC")
     Flowable<List<UrlEntity>> getUrlsOrderByUrl();
+
+    @Query("SELECT * FROM urlsTable ORDER BY availability ASC")
+    Flowable<List<UrlEntity>> getUrlsOrderByAvailability();
+
+    @Query("SELECT * FROM urlsTable ORDER BY loadingTime ASC")
+    Flowable<List<UrlEntity>> getUrlsOrderByLoadingTime();
 }

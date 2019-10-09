@@ -1,20 +1,19 @@
 package com.mino.urltask5.domain;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.LiveDataReactiveStreams;
-
 import com.mino.urltask5.data.db.entity.UrlEntity;
 import com.mino.urltask5.data.repos.UrlRepository;
 import com.mino.urltask5.ui.main.viewmodel.UrlModel;
+import com.mino.urltask5.utils.OrderType;
 import com.mino.urltask5.utils.UrlModelMapper;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Flowable;
 import io.reactivex.disposables.CompositeDisposable;
 
-public class UrlUseCase implements BaseUseCaseBehaivor {
+public class  UrlUseCase implements BaseUseCaseBehaivor {
 
     @Inject
     UrlRepository urlRepository;
@@ -34,14 +33,13 @@ public class UrlUseCase implements BaseUseCaseBehaivor {
         compositeDisposable.add(urlRepository.update(urlEntity));
     }
 
-    public void delete(final UrlEntity urlEntity) {
-        compositeDisposable.add(urlRepository.delete(urlEntity));
+    public void delete(final String url) {
+        compositeDisposable.add(urlRepository.delete(url));
     }
 
-    public LiveData<List<UrlModel>> getUrlsOrderByUrl() {
-        return LiveDataReactiveStreams.fromPublisher(urlRepository.getUrlsOrderByUrl()
-                .map(UrlModelMapper::convert2UrlModel)
-        );
+    public Flowable<List<UrlModel>> getUrlsOrderBy(final OrderType orderType) {
+        return urlRepository.getUrlsOrderBy(orderType)
+                .map(UrlModelMapper::convert2UrlModel);
     }
 
     @Override

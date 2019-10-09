@@ -1,6 +1,11 @@
 package com.mino.urltask5;
 
+import com.mino.urltask5.data.remote.UrlApi;
+import com.mino.urltask5.di.app.DaggerAppComponent;
+
 import org.junit.Test;
+
+import javax.inject.Inject;
 
 import static org.junit.Assert.*;
 
@@ -14,4 +19,5 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+
 }

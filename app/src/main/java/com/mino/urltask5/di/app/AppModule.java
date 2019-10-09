@@ -6,10 +6,14 @@ import androidx.room.Room;
 
 import com.mino.urltask5.data.db.UrlDao;
 import com.mino.urltask5.data.db.UrlDb;
+import com.mino.urltask5.data.remote.UrlApi;
 import com.mino.urltask5.data.repos.UrlRepository;
 
 import dagger.Module;
 import dagger.Provides;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.http.Url;
 
 @Module
 public abstract class AppModule {
@@ -36,5 +40,21 @@ public abstract class AppModule {
     @Provides
     static UrlRepository provideRepository(final UrlDao dao) {
         return new UrlRepository(dao);
+    }
+
+
+    @PerApplication
+    @Provides
+    static Retrofit provideRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl("https://www.google.com")
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build();
+    }
+
+    @PerApplication
+    @Provides
+    static UrlApi provideUrlApi(final Retrofit retrofit) {
+        return retrofit.create(UrlApi.class);
     }
 }

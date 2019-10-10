@@ -60,20 +60,21 @@ public class UrlViewModel extends ViewModel {
     }
 
     private void checkUrl() {
-        remoteUseCase.checkUrl(insertUrl.getValue())
-                .subscribe(getMaybeObserver());
+         remoteUseCase.checkUrl(insertUrl.getValue())
+                .subscribe(getMaybeObserver(insertUrl.getValue()));
     }
 
     public void reCheck(final List<UrlModel> models) {
         compositeDisposable.add(Observable.fromIterable(models)
+                .map(urlModel -> urlModel.resetState(urlModel))
                 .map(urlModel -> urlModel.getUrl().get())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe(url -> remoteUseCase.checkUrl(url).subscribe(getMaybeObserver()))
+                .subscribe(url -> remoteUseCase.checkUrl(url).subscribe(getMaybeObserver(url)))
         );
     }
 
-    public void update(final UrlEntity url) {
+    private void update(final UrlEntity url) {
         urlUseCase.update(url);
     }
 
@@ -86,12 +87,10 @@ public class UrlViewModel extends ViewModel {
     }
 
     public void unsubscribe() {
-        compositeDisposable.clear();
-        remoteUseCase.unsubscribe();
-        urlUseCase.unsubscribe();
+
     }
 
-    private MaybeObserver<UrlEntity> getMaybeObserver() {
+    private MaybeObserver<UrlEntity> getMaybeObserver(final String url) {
         return new MaybeObserver<UrlEntity>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -106,7 +105,7 @@ public class UrlViewModel extends ViewModel {
             @Override
             public void onError(Throwable e) {
                 error.postValue(e.getMessage());
-                update(new UrlEntity(insertUrl.getValue(), URL_UNAVAILABLE, 0));
+                update(new UrlEntity(Objects.requireNonNull(url), URL_UNAVAILABLE, 0));
             }
 
             @Override
@@ -114,5 +113,13 @@ public class UrlViewModel extends ViewModel {
 
             }
         };
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        compositeDisposable.clear();
+        remoteUseCase.unsubscribe();
+        urlUseCase.unsubscribe();
     }
 }

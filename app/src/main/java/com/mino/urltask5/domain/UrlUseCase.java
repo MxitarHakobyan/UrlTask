@@ -10,36 +10,109 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.CompletableObserver;
 import io.reactivex.Flowable;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
-public class  UrlUseCase implements BaseUseCaseBehaivor {
+public class UrlUseCase extends BaseUseCase implements BaseUseCaseBehaviour {
+
+    private UrlRepository urlRepository;
+    private CompositeDisposable compositeDisposable;
 
     @Inject
-    UrlRepository urlRepository;
+    UrlUseCase(final UrlRepository urlRepository,
+               final CompositeDisposable compositeDisposable) {
 
-    @Inject
-    CompositeDisposable compositeDisposable;
-
-    @Inject
-    public UrlUseCase() {
+        this.urlRepository = urlRepository;
+        this.compositeDisposable = compositeDisposable;
     }
 
     public void insert(final UrlEntity urlEntity) {
-        compositeDisposable.add(urlRepository.insert(urlEntity));
+        execute(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                },
+                () -> urlRepository.insert(urlEntity));
     }
 
     public void update(final UrlEntity urlEntity) {
-        compositeDisposable.add(urlRepository.update(urlEntity));
+        execute(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                },
+                () -> urlRepository.update(urlEntity));
+
     }
 
     public void delete(final String url) {
-        compositeDisposable.add(urlRepository.delete(url));
+        execute(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                },
+                () -> urlRepository.delete(url));
     }
 
     public Flowable<List<UrlModel>> getUrlsOrderBy(final OrderType orderType) {
-        return urlRepository.getUrlsOrderBy(orderType)
-                .map(UrlModelMapper::convert2UrlModel);
+
+        if (orderType == OrderType.URL) {
+            return urlRepository.getUrlsOrderByUrl()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .map(UrlModelMapper::convert2UrlModel);
+        } else if (orderType == OrderType.AVAILABILITY) {
+            return urlRepository.getUrlsOrderByAvailability()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .map(UrlModelMapper::convert2UrlModel);
+        } else if (orderType == OrderType.TIME) {
+            return urlRepository.getUrlsOrderByLoadingTime()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .map(UrlModelMapper::convert2UrlModel);
+        } else {
+            return urlRepository.getUrlsOrderByUrl()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .map(UrlModelMapper::convert2UrlModel);
+        }
     }
 
     @Override

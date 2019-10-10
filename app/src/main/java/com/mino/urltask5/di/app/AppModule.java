@@ -4,7 +4,7 @@ import android.app.Application;
 
 import androidx.room.Room;
 
-import com.mino.urltask5.data.db.UrlDao;
+import com.mino.urltask5.data.db.dao.UrlDao;
 import com.mino.urltask5.data.db.UrlDb;
 import com.mino.urltask5.data.remote.UrlApi;
 import com.mino.urltask5.data.repos.UrlRepository;
@@ -13,7 +13,6 @@ import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.http.Url;
 
 @Module
 public abstract class AppModule {

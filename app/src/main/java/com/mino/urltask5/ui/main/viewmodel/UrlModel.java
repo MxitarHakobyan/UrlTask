@@ -6,6 +6,9 @@ import androidx.databinding.ObservableInt;
 
 import java.util.Objects;
 
+import static com.mino.urltask5.utils.Constants.URL_LOADING;
+import static com.mino.urltask5.utils.Constants.URL_UNAVAILABLE;
+
 public class UrlModel {
 
     private ObservableField<String> url;
@@ -29,6 +32,11 @@ public class UrlModel {
     @Override
     public int hashCode() {
         return Objects.hash(url, availability);
+    }
+
+    UrlModel resetState(final UrlModel urlModel) {
+        urlModel.availability.set(URL_LOADING);
+        return urlModel;
     }
 
     public ObservableField<String> getUrl() {

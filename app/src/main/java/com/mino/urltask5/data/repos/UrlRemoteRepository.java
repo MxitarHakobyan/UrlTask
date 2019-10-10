@@ -5,7 +5,6 @@ import com.mino.urltask5.data.remote.UrlApi;
 import javax.inject.Inject;
 
 import io.reactivex.Maybe;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
@@ -14,13 +13,11 @@ public class UrlRemoteRepository {
     private UrlApi api;
 
     @Inject
-    public UrlRemoteRepository(final UrlApi api) {
+    UrlRemoteRepository(final UrlApi api) {
         this.api = api;
     }
 
     public Maybe<Response<ResponseBody>> getResponseObservable(final String url) {
-        return api.getResponse(url)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io());
+        return api.getResponse(url);
     }
 }

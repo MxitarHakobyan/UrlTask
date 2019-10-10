@@ -1,6 +1,6 @@
 package com.mino.urltask5.domain;
 
-public interface BaseUseCaseBehaivor {
+public interface BaseUseCaseBehaviour {
 
     void unsubscribe();
 }

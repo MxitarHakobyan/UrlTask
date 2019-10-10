@@ -1,4 +1,4 @@
-package com.mino.urltask5.data.db;
+package com.mino.urltask5.data.db.dao;
 
 import androidx.room.Dao;
 import androidx.room.Insert;

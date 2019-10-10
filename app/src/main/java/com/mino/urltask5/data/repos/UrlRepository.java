@@ -1,17 +1,13 @@
 package com.mino.urltask5.data.repos;
 
-import com.mino.urltask5.data.db.UrlDao;
+import com.mino.urltask5.data.db.dao.UrlDao;
 import com.mino.urltask5.data.db.entity.UrlEntity;
-import com.mino.urltask5.utils.OrderType;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.Flowable;
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class UrlRepository {
 
@@ -22,46 +18,27 @@ public class UrlRepository {
         this.urlDao = urlDao;
     }
 
-    public Disposable insert(final UrlEntity urlEntity) {
-        return Observable.just(urlEntity)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe(urlEntity1 -> urlDao.insert(urlEntity1));
+    public void insert(final UrlEntity urlEntity) {
+        urlDao.insert(urlEntity);
     }
 
-    public Disposable update(final UrlEntity urlEntity) {
-        return Observable.just(urlEntity)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe(urlEntity1 -> urlDao.update(urlEntity1));
+    public void update(final UrlEntity urlEntity) {
+        urlDao.update(urlEntity);
     }
 
-    public Disposable delete(final String url) {
-        return Observable.just(url)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe(url1 -> urlDao.delete(url1));
+    public void delete(final String url) {
+        urlDao.delete(url);
     }
 
-    public Flowable<List<UrlEntity>> getUrlsOrderBy(final OrderType orderType) {
-
-        if (orderType == OrderType.URL) {
-            return urlDao.getUrlsOrderByUrl()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io());
-        } else if (orderType == OrderType.AVAILABILITY) {
-            return urlDao.getUrlsOrderByAvailability()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io());
-        } else if (orderType == OrderType.TIME) {
-            return urlDao.getUrlsOrderByLoadingTime()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io());
-        } else {
-            return urlDao.getUrlsOrderByUrl()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io());
-        }
+    public Flowable<List<UrlEntity>> getUrlsOrderByUrl() {
+        return urlDao.getUrlsOrderByUrl();
     }
 
+    public Flowable<List<UrlEntity>> getUrlsOrderByAvailability() {
+        return urlDao.getUrlsOrderByAvailability();
+    }
+
+    public Flowable<List<UrlEntity>> getUrlsOrderByLoadingTime() {
+        return urlDao.getUrlsOrderByLoadingTime();
+    }
 }

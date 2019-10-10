@@ -16,17 +16,13 @@
                 android:id="@+id/loadingTime"
                 android:title="@string/sort_by_loading_time" />
         </menu>
+
     </item>
 
     <item
-        android:id="@+id/search"
-        android:title="@string/search">
-        <menu>
-            <item
-                android:id="@+id/action_search"
-                android:title="@string/search"
-                app:actionViewClass="android.widget.SearchView"
-                app:showAsAction="ifRoom|collapseActionView" />
-        </menu>
-    </item>
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView" />
 </menu>

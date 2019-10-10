@@ -60,7 +60,11 @@ public class MainActivity extends DaggerAppCompatActivity implements SwipeHandle
 
         refreshLayout = findViewById(R.id.swipRefresh);
 
-        refreshLayout.setOnRefreshListener(() -> viewModel.reCheck(models));
+        refreshLayout.setOnRefreshListener(() -> {
+            viewModel.reCheck(models);
+            refreshLayout.setRefreshing(false);
+        });
+
 
         rvUrls = findViewById(R.id.rvUrls);
         rvUrls.setLayoutManager(new LinearLayoutManager(this));

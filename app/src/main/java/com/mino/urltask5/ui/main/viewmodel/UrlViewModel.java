@@ -62,10 +62,6 @@ public class UrlViewModel extends ViewModel {
         urlUseCase.reCheck(models);
     }
 
-//    private void update(final UrlEntity url) {
-//        urlUseCase.update(url);
-//    }
-
     public void delete(final String url) {
         urlUseCase.delete(url);
     }

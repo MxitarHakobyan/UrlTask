@@ -1,16 +1,16 @@
 package com.mino.urltask5.ui.main;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,14 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.mino.urltask5.R;
-import com.mino.urltask5.utils.OrderType;
 import com.mino.urltask5.databinding.ActivityMainBinding;
 import com.mino.urltask5.ui.common.binding.ClickHandler;
-import com.mino.urltask5.ui.common.viewmodels_factory.ViewModelProviderFactory;
 import com.mino.urltask5.ui.common.binding.SwipeHandler;
+import com.mino.urltask5.ui.common.viewmodels_factory.ViewModelProviderFactory;
 import com.mino.urltask5.ui.main.adaptors.UrlAdapter;
 import com.mino.urltask5.ui.main.viewmodel.UrlModel;
 import com.mino.urltask5.ui.main.viewmodel.UrlViewModel;
+import com.mino.urltask5.utils.OrderType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,15 +44,23 @@ public class MainActivity extends DaggerAppCompatActivity implements SwipeHandle
     ClickHandler clickHandler;
 
     private UrlViewModel viewModel;
-    private ActivityMainBinding binding;
     private RecyclerView rvUrls;
     private List<UrlModel> models = new ArrayList<>();
     private SwipeRefreshLayout refreshLayout;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        findViews();
+        setSupportActionBar(toolbar);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("");
+        }
+        initSearchView();
+
         viewModel = new ViewModelProvider(getViewModelStore(), providerFactory).get(UrlViewModel.class);
 
         binding.setViewmodel(viewModel);
@@ -60,33 +68,26 @@ public class MainActivity extends DaggerAppCompatActivity implements SwipeHandle
         binding.setLifecycleOwner(this);
         binding.setSwipeHandler(this);
 
-        refreshLayout = findViewById(R.id.swipRefresh);
-
         refreshLayout.setOnRefreshListener(() -> {
             viewModel.reCheck(models);
             refreshLayout.setRefreshing(false);
         });
 
-
-        rvUrls = findViewById(R.id.rvUrls);
-        rvUrls.setLayoutManager(new LinearLayoutManager(this));
-        rvUrls.setAdapter(adapter);
-
+        initRecyclerView();
         getByUrls(OrderType.URL);
 
         viewModel.error.observe(this, s -> Toast.makeText(MainActivity.this, s, Toast.LENGTH_LONG).show());
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_item, menu);
+    private void findViews() {
+        refreshLayout = findViewById(R.id.swipRefresh);
+        toolbar = findViewById(R.id.toolbar);
+        rvUrls = findViewById(R.id.rvUrls);
+    }
 
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
-
+    private void initSearchView() {
+        SearchView searchView = findViewById(R.id.search_view);
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -99,6 +100,17 @@ public class MainActivity extends DaggerAppCompatActivity implements SwipeHandle
                 return false;
             }
         });
+    }
+
+    private void initRecyclerView() {
+        rvUrls.setLayoutManager(new LinearLayoutManager(this));
+        rvUrls.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_item, menu);
         return true;
     }
 

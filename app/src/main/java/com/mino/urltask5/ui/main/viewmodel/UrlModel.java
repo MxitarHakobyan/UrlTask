@@ -34,9 +34,13 @@ public class UrlModel {
         return Objects.hash(url, availability);
     }
 
-    UrlModel resetState(final UrlModel urlModel) {
+    public UrlModel resetState(final UrlModel urlModel) {
         urlModel.availability.set(URL_LOADING);
         return urlModel;
+    }
+
+    public boolean isLoading() {
+        return availability.get() == URL_LOADING;
     }
 
     public ObservableField<String> getUrl() {

@@ -16,8 +16,8 @@ public class UrlRemoteUseCase implements BaseUseCaseBehaviour {
     private CompositeDisposable compositeDisposable;
 
     @Inject
-    public UrlRemoteUseCase(final CompositeDisposable compositeDisposable,
-                            final UrlRemoteRepository repository) {
+    UrlRemoteUseCase(final CompositeDisposable compositeDisposable,
+                     final UrlRemoteRepository repository) {
         this.compositeDisposable = compositeDisposable;
         this.repository = repository;
     }

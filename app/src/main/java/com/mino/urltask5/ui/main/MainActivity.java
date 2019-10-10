@@ -1,5 +1,6 @@
 package com.mino.urltask5.ui.main;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,6 +10,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -127,18 +129,30 @@ public class MainActivity extends DaggerAppCompatActivity implements SwipeHandle
     }
 
     @Override
-    public void onItemSwipedLeft(int position) {
-        viewModel.delete(models.get(position).getUrl().get());
+    public void onItemSwipedLeft(final int position) {
+        deleteUrl(position);
     }
 
     @Override
-    public void onItemSwipedRight(int position) {
-        viewModel.delete(models.get(position).getUrl().get());
+    public void onItemSwipedRight(final int position) {
+        deleteUrl(position);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        viewModel.unsubscribe();
+    private void deleteUrl(final int position) {
+        UrlModel model = models.get(position);
+        if (model.isLoading()) {
+            showAlertDialog(position);
+        }else {
+            viewModel.delete(models.get(position).getUrl().get());
+        }
+    }
+
+    private void showAlertDialog(final int position) {
+        new AlertDialog.Builder(this)
+                .setTitle("The url is loading!")
+                .setMessage("Do you want to delete?")
+                .setPositiveButton("Yes", (dialogInterface, i) -> {
+            viewModel.delete(models.get(position).getUrl().get());
+        });
     }
 }

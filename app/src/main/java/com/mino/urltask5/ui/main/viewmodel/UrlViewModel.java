@@ -36,47 +36,35 @@ public class UrlViewModel extends ViewModel {
     public MutableLiveData<String> insertUrl = new MutableLiveData<>();
     public MutableLiveData<String> error = new MutableLiveData<>();
 
-    @Inject
-    UrlUseCase urlUseCase;
 
-    @Inject
-    UrlRemoteUseCase remoteUseCase;
-
-    @Inject
-    CompositeDisposable compositeDisposable;
+    private UrlUseCase urlUseCase;
+    private UrlRemoteUseCase remoteUseCase;
 
 
     @Inject
-    public UrlViewModel() {
+    UrlViewModel(final UrlUseCase urlUseCase,
+                 final UrlRemoteUseCase remoteUseCase) {
+
+        this.urlUseCase = urlUseCase;
+        this.remoteUseCase = remoteUseCase;
     }
 
     public void insert() {
         if (URLUtil.isValidUrl(insertUrl.getValue())) {
             urlUseCase.insert(new UrlEntity(Objects.requireNonNull(insertUrl.getValue()), URL_LOADING, 0));
-            checkUrl();
         } else {
             error.postValue("Not Valid Url");
         }
     }
 
-    private void checkUrl() {
-         remoteUseCase.checkUrl(insertUrl.getValue())
-                .subscribe(getMaybeObserver(insertUrl.getValue()));
-    }
 
     public void reCheck(final List<UrlModel> models) {
-        compositeDisposable.add(Observable.fromIterable(models)
-                .map(urlModel -> urlModel.resetState(urlModel))
-                .map(urlModel -> urlModel.getUrl().get())
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe(url -> remoteUseCase.checkUrl(url).subscribe(getMaybeObserver(url)))
-        );
+        urlUseCase.reCheck(models);
     }
 
-    private void update(final UrlEntity url) {
-        urlUseCase.update(url);
-    }
+//    private void update(final UrlEntity url) {
+//        urlUseCase.update(url);
+//    }
 
     public void delete(final String url) {
         urlUseCase.delete(url);
@@ -86,39 +74,9 @@ public class UrlViewModel extends ViewModel {
         return LiveDataReactiveStreams.fromPublisher(urlUseCase.getUrlsOrderBy(order));
     }
 
-    public void unsubscribe() {
-
-    }
-
-    private MaybeObserver<UrlEntity> getMaybeObserver(final String url) {
-        return new MaybeObserver<UrlEntity>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                compositeDisposable.add(d);
-            }
-
-            @Override
-            public void onSuccess(UrlEntity entity) {
-                update(entity);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                error.postValue(e.getMessage());
-                update(new UrlEntity(Objects.requireNonNull(url), URL_UNAVAILABLE, 0));
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        };
-    }
-
     @Override
     protected void onCleared() {
         super.onCleared();
-        compositeDisposable.clear();
         remoteUseCase.unsubscribe();
         urlUseCase.unsubscribe();
     }

@@ -10,7 +10,7 @@ public class ViewUtil {
     private ViewUtil() {
     }
 
-    public static Bitmap getBitmap(Drawable drawable) {
+    public static Bitmap getBitmap(final Drawable drawable) {
         Bitmap bitmap;
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;

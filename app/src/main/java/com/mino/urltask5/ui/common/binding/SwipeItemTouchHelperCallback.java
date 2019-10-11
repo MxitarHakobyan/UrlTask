@@ -20,11 +20,13 @@ public class SwipeItemTouchHelperCallback extends ItemTouchHelper.SimpleCallback
     private OnItemSwipeListener onItemSwipeLeftListener, onItemSwipeRightListener;
     private boolean swipeEnabled;
 
-    private SwipeItemTouchHelperCallback(int dragDirs, int swipeDirs) {
+    private SwipeItemTouchHelperCallback(final int dragDirs,
+                                         final int swipeDirs) {
+
         super(dragDirs, swipeDirs);
     }
 
-    private SwipeItemTouchHelperCallback(Builder builder) {
+    private SwipeItemTouchHelperCallback(final Builder builder) {
         this(builder.dragDirs, builder.swipeDirs);
         setPaintColor(paintLeft = new Paint(Paint.ANTI_ALIAS_FLAG), builder.bgColorSwipeLeft);
         setPaintColor(paintRight = new Paint(Paint.ANTI_ALIAS_FLAG), builder.bgColorSwipeRight);

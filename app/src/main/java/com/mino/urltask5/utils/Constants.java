@@ -6,7 +6,4 @@ public class Constants {
     public static final int URL_UNAVAILABLE = 14;
     public static final int URL_LOADING = 15;
 
-    public static final int URL_UNAVAILABLE_LOADING_TIME = 0;
-
-
 }

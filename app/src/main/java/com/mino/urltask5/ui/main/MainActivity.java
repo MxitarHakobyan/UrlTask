@@ -163,8 +163,6 @@ public class MainActivity extends DaggerAppCompatActivity implements SwipeHandle
         new AlertDialog.Builder(this)
                 .setTitle("The url is loading!")
                 .setMessage("Do you want to delete?")
-                .setPositiveButton("Yes", (dialogInterface, i) -> {
-            viewModel.delete(models.get(position).getUrl().get());
-        });
+                .setPositiveButton("Yes", (dialogInterface, i) -> viewModel.delete(models.get(position).getUrl().get()));
     }
 }

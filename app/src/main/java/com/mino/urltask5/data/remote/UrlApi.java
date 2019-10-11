@@ -8,6 +8,6 @@ import retrofit2.http.Url;
 
 public interface UrlApi {
 
-    @GET()
+    @GET
     Maybe<Response<ResponseBody>> getResponse(@Url final String url);
 }

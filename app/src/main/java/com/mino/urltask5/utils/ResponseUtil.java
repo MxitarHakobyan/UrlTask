@@ -15,13 +15,14 @@ public abstract class ResponseUtil {
     private static final String TAG = "ResponseUtil";
 
     private static final int FIRST_CHAR = 0;
+    private static final char VALID_CODE_STARTS = '2';
 
     public static RequestInfo Response2RequestInfo(final Response<ResponseBody> response) {
         return new RequestInfo(response.raw().sentRequestAtMillis(), response.code());
     }
 
     public static int isResponseValid(final int code) {
-        if (String.valueOf(code).charAt(FIRST_CHAR) == '2') {
+        if (String.valueOf(code).charAt(FIRST_CHAR) == VALID_CODE_STARTS) {
             Log.d(TAG, "isResponseValid: code=  " + code);
             return URL_AVAILABLE;
         }else {

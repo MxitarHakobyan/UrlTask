@@ -9,7 +9,7 @@ import java.util.List;
 public abstract class UrlModelMapper {
 
     public static List<UrlModel> convert2UrlModel(final List<UrlEntity> urlEntities) {
-        List<UrlModel> urlModels = new ArrayList<>();
+        final List<UrlModel> urlModels = new ArrayList<>();
         for (UrlEntity  urlEntity : urlEntities) {
             urlModels.add(new UrlModel(urlEntity.getUrl(), urlEntity.getAvailability()));
         }
